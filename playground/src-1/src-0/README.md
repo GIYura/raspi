@@ -1,10 +1,10 @@
-### Compile
+#### Compile
 
 ```
 make all
 ```
 
-### Test
+#### Test
 
 ```
 sudo ./blink <timout-in-milliseconds>
