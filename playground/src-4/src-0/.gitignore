@@ -1,1 +1,6 @@
-*.config
+*
+!*.c
+!*.h
+!makefile
+!*.md
+
