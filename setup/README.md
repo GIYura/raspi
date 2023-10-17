@@ -1,8 +1,8 @@
-### Initial Raspberry setup
+#### Initial Raspberry setup
 
 **NOTE:** default login/password: **pi/raspberry**
 
-1. Write OS **.img** to flash
+1. Write OS **.img** to flash. Can be downloaded [here](https://www.raspberrypi.com/software/operating-systems/)
 
 2. Enable uart
 
