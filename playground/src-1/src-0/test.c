@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     
     if (GpioInit() == -1) 
     {
-        printf("Failed to map the physical GPIO registers into the virtual memory space.\n");
+        printf("Failed to map physical GPIO registers into the virtual memory space.\n");
         return -3;
     }
     
@@ -99,7 +99,8 @@ int main(int argc, char* argv[])
         usleep(blinkTimeout);
     }
     
-    printf("- finished -\n");
+    printf("Stopped\n");
+
     return 0;
 }
 
