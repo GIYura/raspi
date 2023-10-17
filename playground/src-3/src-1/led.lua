@@ -16,8 +16,8 @@ end
 print("Starting the Lua LED Program")
 if arg[1]==nil then
    print("This program requires a command")
-   print("   usage is: lua luaLED.lua command")
-   print("where command is one of setup, on, off, status, or close")
+   print("usage is: lua led.lua or (./led.lua) command")
+   print("where command is: setup, on, off, status, close")
    do return end
 end
 if arg[1]=="on" then
