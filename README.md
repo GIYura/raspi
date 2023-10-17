@@ -40,5 +40,5 @@
 
 - 5V DC via USB-C connector (3A).
 
-![raspi]()
+![raspi](https://github.com/GIYura/raspi/blob/main/raspi.png)
 
