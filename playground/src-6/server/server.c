@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     listenFd = socket(AF_INET, SOCK_STREAM, 0);
     if (listenFd < 0)
     {
-        prrintf("Error: can't create socket\n");
+        printf("Error: can't create socket\n");
         return 1;
     }
 
