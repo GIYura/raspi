@@ -20,8 +20,15 @@ int main(int argc, char *argv[])
     char sendBuffer[1025];
     const char* message = "Hello, I'm Raspberry Server";
     unsigned int reqCounter = 0;
+    unsigned int sendByteNumber = 0;
 
     listenFd = socket(AF_INET, SOCK_STREAM, 0);
+    if (listenFd < 0)
+    {
+        prrintf("Error: can't create socket\n");
+        return 1;
+    }
+
     memset(&serverAddress, '0', sizeof(serverAddress));
     memset(sendBuffer, '0', sizeof(sendBuffer));
 
@@ -32,23 +39,44 @@ int main(int argc, char *argv[])
     printf("Server IP address: %s\n", inet_ntoa(serverAddress.sin_addr));
     printf("Server port: %d\n", (int) ntohs(serverAddress.sin_port));
 
-    bind(listenFd, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
+    if (bind(listenFd, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
+    {
+        printf("Error: can't assign address to socket\n");
+        return 2;
+    }
 
-    listen(listenFd, QUEUE_SIZE);
+    if (listen(listenFd, QUEUE_SIZE))
+    {
+        printf("Error: can't mark socket as passive\n");
+        return 3;
+    }
 
     while(1)
 	{
 		connectionFd = accept(listenFd, (struct sockaddr*)NULL, NULL);
+        
+        if (connectionFd < 0)
+        {
+            printf("Error: can't accept connection\n");
+            break;
+        }
 
         printf("Client made %d request\n", ++reqCounter);
 
-		snprintf(sendBuffer, sizeof(sendBuffer), "%s\r\n", message);
+		sendByteNumber = snprintf(sendBuffer, sizeof(sendBuffer), "%s\r\n", message);
+        printf("Server send %d bytes\n", sendByteNumber);
 
-		write(connectionFd, sendBuffer, strlen(sendBuffer));
+		if (write(connectionFd, sendBuffer, strlen(sendBuffer)) < 0)
+        {
+            printf("Error: can't write message\n");
+            break;
+        }
 
-        close(connectionFd);
-
-        sleep(1);
+        if (close(connectionFd) < 0)
+        {
+            printf("Error: can't close socket\n");
+            break;
+        }
      }
 }
 
