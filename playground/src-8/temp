@@ -1,0 +1,58 @@
+#!/bin/bash
+
+#Get temperature from DS18B20
+
+TEMPERATURE=0
+DIVIDER=1000
+FILE=/sys/bus/w1/devices/28-3c01f095147d/w1_slave
+
+function TempSensor_Connect()
+{
+    #cat $FILE
+
+
+    echo -e "Sensor Not Connected"
+}
+
+function TempSensor_Read()
+{
+    temp=0
+    res=$(CheckSum_Read)
+    if [[ $res -eq 0 ]]; then
+        while read line; do
+            if [[ $line == *"t="* ]]; then
+            end=${#line}
+            start=$((len-5))
+            temp=${line:$start:$end}
+            fi
+        done < $FILE
+    else
+        echo "Check sum FAILED"
+    fi
+    
+    echo $temp
+}
+
+function CheckSum_Read()
+{
+    res=1
+    n=1
+    while read line; do
+    
+        if [[ $line == *"crc"* ]]; then
+            if [[ $line == *"YES"* ]]; then
+                res=0
+                break
+            fi
+        fi
+
+        n=$((n+1))
+    done < $FILE
+    echo "$res"
+}
+
+TEMPERATURE=$(TempSensor_Read)
+
+awk "BEGIN {printf \"Ambient Temp = %.2f Celsius\n\", $TEMPERATURE/$DIVIDER}"
+
+
