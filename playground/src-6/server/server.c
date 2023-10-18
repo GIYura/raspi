@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in serverAddress;
     char sendBuffer[1025];
     const char* message = "Hello, I'm Raspberry Server";
+    unsigned int reqCounter = 0;
 
     listenFd = socket(AF_INET, SOCK_STREAM, 0);
     memset(&serverAddress, '0', sizeof(serverAddress));
@@ -38,6 +39,8 @@ int main(int argc, char *argv[])
     while(1)
 	{
 		connectionFd = accept(listenFd, (struct sockaddr*)NULL, NULL);
+
+        printf("Client made %d request\n", ++reqCounter);
 
 		snprintf(sendBuffer, sizeof(sendBuffer), "%s\r\n", message);
 
