@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
     if (argc != 3)
     {
-        printf("Invalid number of arguments\n");
+        printf("Error: Invalid number of arguments\n");
         return 1;
     }
     
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
     if ((socketFd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        printf("\n Error : Could not create socket \n");
+        printf("Error: Could not create socket\n");
         return 1;
     }
 
@@ -37,28 +37,28 @@ int main(int argc, char* argv[])
 
     if (inet_pton(AF_INET, argv[1], &serverAddress.sin_addr) <= 0)
     {
-        printf("\n inet_pton error occured\n");
+        printf("Error: inet_pton error occured\n");
         return 1;
     }
 
     if (connect(socketFd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0)
     {
-       printf("\n Error : Connect Failed \n");
+       printf("Error: Connect Failed\n");
        return 1;
     }
 
-    while ((n = read(socketFd, receiveBuffer, sizeof(receiveBuffer)-1)) > 0)
+    while ((n = read(socketFd, receiveBuffer, sizeof(receiveBuffer) - 1)) > 0)
     {
         receiveBuffer[n] = 0;
         if (fputs(receiveBuffer, stdout) == EOF)
         {
-            printf("\n Error : Fputs error\n");
+            printf("Error: Fputs error\n");
         }
     }
 
     if (n < 0)
     {
-        printf("\n Read error \n");
+        printf("Error: Read error\n");
     }
 
     close (socketFd);
