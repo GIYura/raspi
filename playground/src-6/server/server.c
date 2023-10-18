@@ -1,7 +1,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <netdb.h>  /* hostent struct, gethostbyname() */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -15,42 +14,38 @@
 
 int main(int argc, char *argv[])
 {
-    int listenfd = 0;
-	int connfd = 0;
-    struct sockaddr_in serv_addr;
-
-    char sendBuff[1025];
-    time_t ticks;
-
+    int listenFd = 0;
+	int connectionFd = 0;
+    struct sockaddr_in serverAddress;
+    char sendBuffer[1025];
     const char* message = "Hello, I'm Raspberry Server";
 
-    listenfd = socket(AF_INET, SOCK_STREAM, 0);
-    memset(&serv_addr, '0', sizeof(serv_addr));
-    memset(sendBuff, '0', sizeof(sendBuff));
+    listenFd = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&serverAddress, '0', sizeof(serverAddress));
+    memset(sendBuffer, '0', sizeof(sendBuffer));
 
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.0.100");//htonl(INADDR_ANY);
-    serv_addr.sin_port = htons(SERVER_PORT);
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_addr.s_addr = inet_addr("192.168.0.100");
+    serverAddress.sin_port = htons(SERVER_PORT);
 
-    printf("IP address is: %s\n", inet_ntoa(serv_addr.sin_addr));
-    printf("port is: %d\n", (int) ntohs(serv_addr.sin_port));
+    printf("Server IP address: %s\n", inet_ntoa(serverAddress.sin_addr));
+    printf("Server port: %d\n", (int) ntohs(serverAddress.sin_port));
 
-    bind(listenfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
+    bind(listenFd, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
 
-    listen(listenfd, QUEUE_SIZE);
+    listen(listenFd, QUEUE_SIZE);
 
     while(1)
 	{
-		connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
-		ticks = time(NULL);
-#if 0
-        snprintf(sendBuff, sizeof(sendBuff), "%.24s\r\n", ctime(&ticks));
-#else	
-		snprintf(sendBuff, sizeof(sendBuff), "%s\r\n", message);       
-#endif
-		write(connfd, sendBuff, strlen(sendBuff));
+		connectionFd = accept(listenFd, (struct sockaddr*)NULL, NULL);
 
-        close(connfd);
+		snprintf(sendBuffer, sizeof(sendBuffer), "%s\r\n", message);
+
+		write(connectionFd, sendBuffer, strlen(sendBuffer));
+
+        close(connectionFd);
+
         sleep(1);
      }
 }
+
