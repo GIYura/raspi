@@ -2,7 +2,7 @@ CC = gcc
 RM = rm -rf
 CFLAGS = -std=c99 -c -g -O0 -MD -Wall
 LDFLAGS = 
-LIB=wiringPi
+LIB=bcm2835
 SRC = $(wildcard *.c)
 OBJ = $(addsuffix .o, $(basename $(SRC)))
 TARGET = test
