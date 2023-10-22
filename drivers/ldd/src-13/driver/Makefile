@@ -1,4 +1,4 @@
-obj-m += ioctl_ex.o
+obj-m += params.o
 
 KERNEL_VERSION := $(shell uname -r)
 
@@ -11,10 +11,10 @@ clean:
 	make -C $(KDIR) M=$(PWD) clean
 
 load:
-	sudo insmod ioctl_ex.ko
+	sudo insmod params.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod ioctl_ex.ko
+	sudo rmmod params.ko
 	sudo dmesg -c
 	

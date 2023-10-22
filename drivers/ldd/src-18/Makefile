@@ -1,4 +1,4 @@
-obj-m += proc-fs.o
+obj-m += wait-queue.o
 
 KERNEL_VERSION := $(shell uname -r)
 
@@ -11,10 +11,10 @@ clean:
 	make -C $(KDIR) M=$(PWD) clean
 
 load:
-	sudo insmod proc-fs.ko
+	sudo insmod wait-queue.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod proc-fs.ko
+	sudo rmmod wait-queue.ko
 	sudo dmesg -c
 	

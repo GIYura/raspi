@@ -1,4 +1,4 @@
-obj-m += bmp280.o
+obj-m += gpio-irq-poll.o
 
 KERNEL_VERSION := $(shell uname -r)
 
@@ -11,10 +11,10 @@ clean:
 	make -C $(KDIR) M=$(PWD) clean
 
 load:
-	sudo insmod bmp280.ko
+	sudo insmod gpio-irq-poll.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod bmp280.ko
+	sudo rmmod gpio-irq-poll.ko
 	sudo dmesg -c
 	

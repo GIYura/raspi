@@ -1,44 +1,20 @@
-obj-m += dt-probe.o
+obj-m += sys-fs.o
 
-all: module dt
-	@echo 'Builded Device Tree Overlay and kernel module'
+KERNEL_VERSION := $(shell uname -r)
 
-module:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+KDIR ?= /lib/modules/$(KERNEL_VERSION)/build
 
-dt: testoverlay.dts
-	dtc -@ -I dts -O dtb -o testoverlay.dtbo testoverlay.dts
+all:
+	make -C $(KDIR) M=$(PWD) modules
 
 clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
-	rm -rf testoverlay.dtbo
+	make -C $(KDIR) M=$(PWD) clean
 
 load:
-	sudo insmod dt-probe.ko
+	sudo insmod sys-fs.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod dt-probe.ko
+	sudo rmmod sys-fs.ko
 	sudo dmesg -c
-
-
-#obj-m += sys-fs.o
-
-#KERNEL_VERSION := $(shell uname -r)
-
-#KDIR ?= /lib/modules/$(KERNEL_VERSION)/build
-
-#all:
-#    make -C $(KDIR) M=$(PWD) modules
-
-#clean:
-#	make -C $(KDIR) M=$(PWD) clean
-
-#load:
-#	sudo insmod sys-fs.ko
-#	sudo dmesg -c
-
-#unload:
-#	sudo rmmod sys-fs.ko
-#	sudo dmesg -c
 	

@@ -1,4 +1,4 @@
-obj-m += params.o
+obj-m += gpio-irq.o
 
 KERNEL_VERSION := $(shell uname -r)
 
@@ -11,10 +11,10 @@ clean:
 	make -C $(KDIR) M=$(PWD) clean
 
 load:
-	sudo insmod params.ko
+	sudo insmod gpio-irq.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod params.ko
+	sudo rmmod gpio-irq.ko
 	sudo dmesg -c
 	

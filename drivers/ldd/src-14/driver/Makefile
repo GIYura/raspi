@@ -1,4 +1,4 @@
-obj-m += kthread.o
+obj-m += ioctl_ex.o
 
 KERNEL_VERSION := $(shell uname -r)
 
@@ -11,10 +11,10 @@ clean:
 	make -C $(KDIR) M=$(PWD) clean
 
 load:
-	sudo insmod kthread.ko
+	sudo insmod ioctl_ex.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod kthread.ko
+	sudo rmmod ioctl_ex.ko
 	sudo dmesg -c
 	

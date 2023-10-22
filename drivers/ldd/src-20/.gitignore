@@ -12,5 +12,3 @@
 *.o.cmd
 *.order.cmd
 *.symvers.cmd
-
-*.dtbo

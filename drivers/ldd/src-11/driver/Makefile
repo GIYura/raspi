@@ -1,4 +1,4 @@
-obj-m += gpio-irq.o
+obj-m += bmp280-spi.o
 
 KERNEL_VERSION := $(shell uname -r)
 
@@ -11,10 +11,10 @@ clean:
 	make -C $(KDIR) M=$(PWD) clean
 
 load:
-	sudo insmod gpio-irq.ko
+	sudo insmod bmp280-spi.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod gpio-irq.ko
+	sudo rmmod bmp280-spi.ko
 	sudo dmesg -c
 	

@@ -1,4 +1,4 @@
-obj-m += sys-fs.o
+obj-m += proc-fs.o
 
 KERNEL_VERSION := $(shell uname -r)
 
@@ -11,10 +11,10 @@ clean:
 	make -C $(KDIR) M=$(PWD) clean
 
 load:
-	sudo insmod sys-fs.ko
+	sudo insmod proc-fs.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod sys-fs.ko
+	sudo rmmod proc-fs.ko
 	sudo dmesg -c
 	

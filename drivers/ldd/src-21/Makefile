@@ -1,4 +1,4 @@
-obj-m += dt-gpio.o
+obj-m += dt-probe.o
 
 all: module dt
 	@echo 'Builded Device Tree Overlay and kernel module'
@@ -14,10 +14,31 @@ clean:
 	rm -rf testoverlay.dtbo
 
 load:
-	sudo insmod dt-gpio.ko
+	sudo insmod dt-probe.ko
 	sudo dmesg -c
 
 unload:
-	sudo rmmod dt-gpio.ko
+	sudo rmmod dt-probe.ko
 	sudo dmesg -c
+
+
+#obj-m += sys-fs.o
+
+#KERNEL_VERSION := $(shell uname -r)
+
+#KDIR ?= /lib/modules/$(KERNEL_VERSION)/build
+
+#all:
+#    make -C $(KDIR) M=$(PWD) modules
+
+#clean:
+#	make -C $(KDIR) M=$(PWD) clean
+
+#load:
+#	sudo insmod sys-fs.ko
+#	sudo dmesg -c
+
+#unload:
+#	sudo rmmod sys-fs.ko
+#	sudo dmesg -c
 	
