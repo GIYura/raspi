@@ -114,5 +114,5 @@ cdev_init();
 cdev_add();
 ```
 
-![driver-app](https://github.com/GIYura/raspi/blob/main/drivers/ldd/driver.png)
+![driver-app](https://github.com/GIYura/raspi/blob/main/drivers/ldd/driver-app.png)
 
