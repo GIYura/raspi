@@ -1,26 +1,25 @@
+/*
+Simple kernel module
+*/
 #include <linux/module.h>
 #include <linux/init.h>
 
 /* Meta Information */
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Jura");
-MODULE_DESCRIPTION("Hello world Linux Kernel Module");
+MODULE_DESCRIPTION("Hello world for Linux Kernel Module");
 
-/**
- * @brief This function is called, when the module is loaded into the kernel
- */
+/* This function is called, when the module is loaded into the kernel */
 static int __init moduleInit(void)
 {
-	printk("Hello, Kernel!\n");
-	return 0;
+    printk("Hello, Kernel!\n");
+    return 0;
 }
 
-/**
- * @brief This function is called, when the module is removed from the kernel
- */
+/* This function is called, when the module is removed from the kernel */
 static void __exit moduleExit(void)
 {
-	printk("Goodbye, Kernel\n");
+    printk("Goodbye, Kernel\n");
 }
 
 module_init(moduleInit);
