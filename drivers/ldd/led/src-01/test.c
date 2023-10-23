@@ -81,7 +81,7 @@ static const struct file_operations drvled_fops =
     .write = LedWrite,
 };
 
-static int __init drvled_init(void)
+static int __init LedInit(void)
 {
     int result;
 
@@ -109,15 +109,15 @@ static int __init drvled_init(void)
     return 0;
 }
 
-static void __exit drvled_exit(void)
+static void __exit LedExit(void)
 {
     cdev_del(&m_ledData.cdev);
     unregister_chrdev_region(m_ledData.deviceNumber, 1);
     printk("%s: exiting.\n", DRIVER_NAME);
 }
 
-module_init(drvled_init);
-module_exit(drvled_exit);
+module_init(LedInit);
+module_exit(LedExit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Jura");
