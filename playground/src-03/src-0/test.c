@@ -44,9 +44,9 @@ int main(int argc, char* argv[])
     }
     
     /* must use INP_GPIO before we can use OUT_GPIO */
-    INP_GPIO(GPIO_LED); 
+    INP_GPIO(GPIO_LED);
     OUT_GPIO(GPIO_LED);
-    
+ 
     for (;;)
     {
         GPIO_CLR = 1 << GPIO_LED;
@@ -78,12 +78,12 @@ static int GpioInit(void)
     {
         /* mmap GPIO */
         gpioMap = mmap(
-            NULL,					/* Any adddress in our space will do */
-            BLOCK_SIZE,				/* Map length */
-            PROT_READ|PROT_WRITE,	/* Enable reading & writting to mapped memory */
-            MAP_SHARED,       		/* Shared with other processes */
-            memFd,           		/* File to map */
-            GPIO_BASE         		/* Offset to GPIO peripheral */   
+            NULL,                   /* Any adddress in our space will do */
+            BLOCK_SIZE,             /* Map length */
+            PROT_READ|PROT_WRITE,   /* Enable reading & writting to mapped memory */
+            MAP_SHARED,             /* Shared with other processes */
+            memFd,                  /* File to map */
+            GPIO_BASE               /* Offset to GPIO peripheral */   
         );
         
         close(memFd);
