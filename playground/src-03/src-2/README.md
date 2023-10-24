@@ -14,8 +14,8 @@ make all
 #### Usage
 
 ```
-./blink setup   - /* set up LED and direction */
-./blink on      - /* turn on LED */ 
-./blink off     - /* turn off LED */
-./blink close   - /* deinit LED */
+./test setup   - /* set up LED and direction */
+./test on      - /* turn on LED */ 
+./test off     - /* turn off LED */
+./test close   - /* deinit LED */
 ```
