@@ -70,7 +70,3 @@ ioremap();
 readl()/writel();
 ```
 
-
-
-
-
