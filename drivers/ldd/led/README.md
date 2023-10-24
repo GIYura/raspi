@@ -70,3 +70,9 @@ ioremap();
 readl()/writel();
 ```
 
+**NOTE:**
+Адрес периферии можно узнать выполнив команду:
+```
+sudo cat /proc/iomem
+```
+
