@@ -53,11 +53,6 @@ static void LedClear(void)
     
     /* write value */
     writel(val, m_led->regBase + GPIO_REG_CLR);
-
-#if 0
-    /* update status */
-    m_led->status = LED_OFF;
-#endif
 }
 
 static void LedSet(void)
@@ -72,26 +67,7 @@ static void LedSet(void)
     
     /* write value */
     writel(val, m_led->regBase + GPIO_REG_SET);
-
-#if 0
-    /* update status */
-    m_led->status = LED_ON;
-#endif
 }
-
-#if 0
-static void drvled_setled(unsigned int status)
-{
-        u32 val;
-
-        val = readl(m_led->regBase + GPIO1_REG_DATA);
-        if (status == LED_ON)
-                val |= GPIO_BIT;
-        else if (status == LED_OFF)
-                val &= ~GPIO_BIT;
-        writel(val, m_led->regBase + GPIO1_REG_DATA);
-}
-#endif
 
 static void LedChangeState(struct led_classdev *led_cdev, enum led_brightness brightness)
 {
@@ -111,15 +87,6 @@ static int __init LedInit(void)
         result = -ENOMEM;
         goto ret_err_kzalloc;
     }
-
-#if 0
-    if (!request_mem_region(GPIO_BASE, GPIO_SIZE, DRIVER_NAME))
-    {
-        printk("%s: Error requesting I/O!\n", DRIVER_NAME);
-        result = -EBUSY;
-        goto ret_err_request_mem_region;
-    }
-#endif
 
     m_led->regBase = ioremap(GPIO_BASE, GPIO_SIZE);
     if (!m_led->regBase)
@@ -150,9 +117,6 @@ ret_err_led_classdev_register:
     iounmap(m_led->regBase);
 err_ioremap:
     release_mem_region(GPIO_BASE, GPIO_SIZE);
-#if 0
-ret_err_request_mem_region:
-#endif
     kfree(m_led);
 ret_err_kzalloc:
 ret_ok:
@@ -163,9 +127,6 @@ static void __exit LedExit(void)
 {
     led_classdev_unregister(&m_led->led_cdev);
     iounmap(m_led->regBase);
-#if 0
-    release_mem_region(GPIO_BASE, GPIO_SIZE);
-#endif
     kfree(m_led);
     printk("%s: exiting.\n", DRIVER_NAME);
 }
