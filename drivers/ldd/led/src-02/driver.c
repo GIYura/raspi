@@ -11,49 +11,71 @@
 #define LED_OFF 0
 #define LED_ON  1
 
-#define GPIO1_BASE      0x0209C000
-#define GPIO1_SIZE      8
+#define BCM2711_PERI_BASE   0xfe000000
+#define GPIO_BASE           (BCM2711_PERI_BASE + 0x200000) /* GPIO controller */
+#define GPIO_SIZE           9
 
-#define GPIO1_REG_DATA  0
-#define GPIO1_REG_DIR   4
-
-#define GPIO_BIT        (1 << 9)
+#define GPIO_REG_DIR        0x08
+#define GPIO_REG_SET        0x1c
+#define GPIO_REG_CLR        0x28
+#define GPIO_BIT            (1 << 3)
 
 typedef struct
 {
-    dev_t devnum;
+    dev_t deviceNumber;
     struct cdev cdev;
     unsigned char status;
     void __iomem *regBase;
 } ledData_t;
 
-static ledData_t m_ledData;
+static ledData_t m_led;
 
-static void LedSet(unsigned char status)
+static void LedClear(void)
 {
     u32 val;
 
-    /* set value */
-    val = readl(m_ledData.regBase + GPIO1_REG_DATA);
-        
-    if (status == LED_ON)
-        val |= GPIO_BIT;
-    else if (status == LED_OFF)
-        val &= ~GPIO_BIT;
+    /* read value */
+    val = readl(m_led.regBase + GPIO_REG_CLR);
+
+    /* modify (clear bit) */
+    val &= ~GPIO_BIT;
     
-    writel(val, m_ledData.regBase + GPIO1_REG_DATA);
+    /* write value */
+    writel(val, m_led.regBase + GPIO_REG_CLR);
 
     /* update status */
-    m_ledData.status = status;
+    m_led.status = LED_OFF;
+}
+
+static void LedSet(void)
+{
+    u32 val;
+
+    /* read value */
+    val = readl(m_led.regBase + GPIO_REG_SET);
+
+    /* modify (set bit) */
+    val |= GPIO_BIT;
+    
+    /* write value */
+    writel(val, m_led.regBase + GPIO_REG_SET);
+
+    /* update status */
+    m_led.status = LED_ON;
 }
 
 static void LedSetDirection(void)
 {
     u32 val;
 
-    val = readl(m_ledData.regBase + GPIO1_REG_DIR);
+    /* read value */
+    val = readl(m_led.regBase + GPIO_REG_DIR);
+
+    /* modify (set bit) */
     val |= GPIO_BIT;
-    writel(val, m_ledData.regBase + GPIO1_REG_DIR);
+
+    /* write value */
+    writel(val, m_led.regBase + GPIO_REG_DIR);
 }
 
 static ssize_t LedRead(struct file *file, char __user *buf, size_t count, loff_t *ppos)
@@ -65,11 +87,11 @@ static ssize_t LedRead(struct file *file, char __user *buf, size_t count, loff_t
     if (*ppos > 0)
         return 0;
 
-    size = strlen(msg[m_ledData.status]);
+    size = strlen(msg[m_led.status]);
     if (size > count)
         size = count;
 
-    if (copy_to_user(buf, msg[m_ledData.status], size))
+    if (copy_to_user(buf, msg[m_led.status], size))
         return -EFAULT;
 
     *ppos += size;
@@ -86,13 +108,11 @@ static ssize_t LedWrite(struct file *file, const char __user *buf, size_t count,
 
     if (kbuf == '1')
     {
-        LedSet(LED_ON);
-        printk("LED ON!\n");
+        LedSet();
     } 
     else if (kbuf == '0')
     {
-        LedSet(LED_OFF);
-        printk("LED OFF!\n");
+        LedClear();
     }
     return count;
 }
@@ -108,61 +128,54 @@ static int __init LedInit(void)
 {
     int result = 0;
 
-    if (!request_mem_region(GPIO1_BASE, GPIO1_SIZE, DRIVER_NAME))
-    {
-        printk("%s: Error requesting I/O!\n", DRIVER_NAME);
-        result = -EBUSY;
-        goto ret_err_request_mem_region;
-    }
-
-    m_ledData.regBase = ioremap(GPIO1_BASE, GPIO1_SIZE);
-    if (!m_ledData.regBase)
+    m_led.regBase = ioremap(GPIO_BASE, GPIO_SIZE);
+    if (!m_led.regBase)
     {
         printk("%s: Error mapping I/O!\n", DRIVER_NAME);
         result = -ENOMEM;
         goto err_ioremap;
     }
 
-    result = alloc_chrdev_region(&m_ledData.devnum, 0, 1, DRIVER_NAME);
+    result = alloc_chrdev_region(&m_led.deviceNumber, 0, 1, DRIVER_NAME);
     if (result)
     {
         printk("%s: Failed to allocate device number!\n", DRIVER_NAME);
         goto ret_err_alloc_chrdev_region;
     }
 
-    cdev_init(&m_ledData.cdev, &LedOperations);
+    cdev_init(&m_led.cdev, &LedOperations);
 
-    result = cdev_add(&m_ledData.cdev, m_ledData.devnum, 1);
+    result = cdev_add(&m_led.cdev, m_led.deviceNumber, 1);
     if (result)
     {
         printk("%s: Char device registration failed!\n", DRIVER_NAME);
         goto ret_err_cdev_add;
     }
 
+    /* setup gpio LED direction */
     LedSetDirection();
 
-    LedSet(LED_OFF);
+    /* turn off LED */
+    LedClear();
 
     printk("%s: initialized.\n", DRIVER_NAME);
     goto ret_ok;
 
 ret_err_cdev_add:
-    unregister_chrdev_region(m_ledData.devnum, 1);
+    unregister_chrdev_region(m_led.deviceNumber, 1);
 ret_err_alloc_chrdev_region:
-    iounmap(m_ledData.regBase);
+    iounmap(m_led.regBase);
 err_ioremap:
-    release_mem_region(GPIO1_BASE, GPIO1_SIZE);
-ret_err_request_mem_region:
+    release_mem_region(GPIO_BASE, GPIO_SIZE);
 ret_ok:
     return result;
 }
 
 static void __exit LedExit(void)
 {
-    cdev_del(&m_ledData.cdev);
-    unregister_chrdev_region(m_ledData.devnum, 1);
-    iounmap(m_ledData.regBase);
-    release_mem_region(GPIO1_BASE, GPIO1_SIZE);
+    cdev_del(&m_led.cdev);
+    unregister_chrdev_region(m_led.deviceNumber, 1);
+    iounmap(m_led.regBase);
     printk("%s: exiting.\n", DRIVER_NAME);
 }
 

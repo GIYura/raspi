@@ -1,0 +1,47 @@
+#!/bin/bash
+
+LED_FILE=$1
+
+if [ "$#" -ne 1 ]; then
+    echo -e "Illegal number of parameters\n"
+    echo -e "Usage: ./test [device file]\n"
+    exit
+fi
+
+if [ ! -e "$LED_FILE" ]; then
+    echo "File doesn't exist"
+    exit
+fi
+
+if [ ! -O "$LED_FILE" ]; then
+    echo "Not file owner"
+    exit
+fi
+
+if [ ! -G "$LED_FILE" ]; then
+    echo "File doesn't belong to user group"
+    exit
+fi
+
+ledOn()
+{
+    echo 1 > "$LED_FILE"
+    echo "LED ON"
+}
+
+ledOff()
+{
+    echo 0 > "$LED_FILE"
+    echo "LED OFF"
+}
+
+echo -e "NOTE: Blink LED timeout: 500 ms"
+
+while [ 1 ]
+do
+    ledOn
+    sleep 0.5
+    ledOff
+    sleep 0.5
+done
+
