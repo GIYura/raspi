@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
         printf("Failed to map physical GPIO registers into the virtual memory space.\n");
         return -3;
     }
-    
+
     /* must use INP_GPIO before we can use OUT_GPIO */
     INP_GPIO(GPIO_LED);
     OUT_GPIO(GPIO_LED);
@@ -97,7 +97,8 @@ static int GpioInit(void)
     
     /* Always use volatile pointer! */
     m_gpio = (volatile unsigned *)gpioMap;
-    printf ("%s\n", "Blinking...");
+    printf("%s\n", "Blinking...");
+
     return 0;
 }
 
