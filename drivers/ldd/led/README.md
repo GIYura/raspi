@@ -3,7 +3,7 @@
 ```
 src-01 - пример драйвера LED (абстракция - ч.1);
 src-02 - пример драйвера LED (talk-to-hardware - ч.2);
-src-03 - 
+src-03 - пример драйвера LED (led framework - ч.3); 
 src-04 - 
 src-05
 ```
@@ -86,4 +86,39 @@ sudo cat /proc/iomem
 - драйвер имеет информацию о железе, при смене железа, драйвер тоже нужно менять. Драйвер должен
 предоставлять абстракцию и уметь работать с любым железом.
 
+#### Решение первого недостатка. LED framework.
+
+- инициализация структуры **led_classdev**;
+- привязка callback ф-ии для изменения состояни LED;
+- регистрация драйвера в framework **led_classdev_register()**.
+
+**Тест:**
+1. Выполнить команды:
+
+```
+make load
+cd /sys/class/leds
+ls -l
+```
+
+2. Убедиться что есть новый интерфейс ipe:blue:user
+
+3. Выполнить:
+```
+cd ipe:blue:user
+```
+4. Изменить влыдельца:
+```
+sudo chown USER:GPOUP brightness
+sudo chown USER:GPOUP trigger
+```
+5. Выполнить:
+```
+echo heartbeat > trigger
+```
+
+6. Выполнить:
+```
+make unload
+```
 
