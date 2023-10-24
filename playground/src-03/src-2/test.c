@@ -72,8 +72,8 @@ int main(int argc, char* argv[])
 static bool GpioWrite(char* const filename, const char* const value)
 {
     FILE* fp;                           /* create a file pointer fp */
-//    printf("%s\n", filename);
-    fp = fopen(filename, "w");         /* open file for writing */
+
+    fp = fopen(filename, "w");          /* open file for writing */
     if (NULL == fp)
     {
         printf("Can't open file: %s\n", filename);
