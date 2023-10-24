@@ -128,6 +128,15 @@ static int __init LedInit(void)
 {
     int result = 0;
 
+#if 0
+    if (!request_mem_region(GPIO_BASE, GPIO_SIZE, DRIVER_NAME))
+    {
+        printk("%s: Error requesting I/O!\n", DRIVER_NAME);
+        result = -EBUSY;
+        goto ret_err_request_mem_region;
+    }
+#endif
+
     m_led.regBase = ioremap(GPIO_BASE, GPIO_SIZE);
     if (!m_led.regBase)
     {
@@ -167,6 +176,9 @@ ret_err_alloc_chrdev_region:
     iounmap(m_led.regBase);
 err_ioremap:
     release_mem_region(GPIO_BASE, GPIO_SIZE);
+#if 0
+ret_err_request_mem_region:
+#endif
 ret_ok:
     return result;
 }
@@ -176,6 +188,9 @@ static void __exit LedExit(void)
     cdev_del(&m_led.cdev);
     unregister_chrdev_region(m_led.deviceNumber, 1);
     iounmap(m_led.regBase);
+#if 0
+    release_mem_region(GPIO_BASE, GPIO_SIZE);
+#endif
     printk("%s: exiting.\n", DRIVER_NAME);
 }
 
