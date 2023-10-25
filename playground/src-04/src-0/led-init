@@ -1,0 +1,27 @@
+#!/bin/bash
+
+FILE=$(pwd)/.config
+
+if [ ! -f $FILE ]; then
+    echo ".config file not found"
+    exit
+fi
+
+source $FILE
+
+if [ ! -e $LED_PATH/gpio$LED_PIN ]; then
+    echo $LED_PIN > $LED_PATH/export
+    
+    if [ ! -e $LED_PATH/gpio$LED_PIN ]; then
+        echo "Can't export LED file"
+        exit
+    fi
+
+    sleep 0.1   #to ensure gpio has been exported before next step
+    echo "out" > $LED_PATH/gpio$LED_PIN/direction
+    echo "LED init successfully"
+    exit
+fi
+    echo "Error: LED file already exists"
+    exit
+
