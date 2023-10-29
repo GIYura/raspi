@@ -134,9 +134,5 @@ make unload
 - bus driver - drivers responsible for managing a device conneted to the bus, represented in the kernel by **device_driver** structure;
 - bus devices - device connected to the bus, represented in the kernel by **device** structure;
 
-!(driver-bus)[]
-
-
-
-
+![driver-bus](https://github.com/GIYura/raspi/blob/main/drivers/ldd/led/driver-bus.png)
 
