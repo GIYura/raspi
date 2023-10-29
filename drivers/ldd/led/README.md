@@ -5,7 +5,7 @@ src-01 - пример драйвера LED (абстракция - ч.1);
 src-02 - пример драйвера LED (talk-to-hardware - ч.2);
 src-03 - пример драйвера LED (led framework - ч.3); 
 src-04 - пример драйвера LED (access to HW via GPIOLIB - ч.4);
-src-05
+src-05 - пример драйвера LED (device tree, bus infrastructure - ч.5).
 ```
 
 #### Введение
@@ -123,4 +123,20 @@ make unload
 ```
 
 #### Решение второго недостатка. GPIO lib
+
+Тестирование как в предыдущем пункте
+
+#### Решение третьего недостатка. Device treee (bus infrastructure)
+
+4 основных компонента:
+- bus core - API impelentation of a given bus (USB core, SPI core etc) represented in the kernel by **bus_type** structure;
+- bus adapter - bus controller driver, represented in the kernel by **device_driver** structure;
+- bus driver - drivers responsible for managing a device conneted to the bus, represented in the kernel by **device_driver** structure;
+- bus devices - device connected to the bus, represented in the kernel by **device** structure;
+
+!(driver-bus)[]
+
+
+
+
 
