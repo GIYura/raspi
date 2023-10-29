@@ -138,3 +138,9 @@ make unload
 
 ![i2c-bus](https://github.com/GIYura/raspi/blob/main/drivers/ldd/led/i2c-bus.png)
 
+NOTE:
+```
+/sys/bus/platform/drivers
+/sys/bus/platform/devices
+```
+

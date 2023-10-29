@@ -34,7 +34,7 @@ static void OnLedChangeState(struct led_classdev *led_cdev, enum led_brightness 
         LedSet(LED_OFF);
 }
 
-static int drvled_probe(struct platform_device *pdev)
+static int LedProbe(struct platform_device *pdev)
 {
     struct device_node *np = pdev->dev.of_node;
     struct device_node *child = NULL;
@@ -74,7 +74,7 @@ static int drvled_probe(struct platform_device *pdev)
     return 0;
 }
 
-static int drvled_remove(struct platform_device *pdev)
+static int LedRemove(struct platform_device *pdev)
 {
     dev_info(&pdev->dev, "exiting.\n");
 
@@ -82,18 +82,18 @@ static int drvled_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id of_drvled_match[] = {
-    { .compatible = "labworks,drvled" },
+    { .compatible = "led-driver" },
     {},
 };
 
 static struct platform_driver drvled_driver = {
     .driver = {
-        .name   = "drvleds",
+        .name   = "led-driver",
         .owner  = THIS_MODULE,
         .of_match_table = of_drvled_match,
     },
-    .probe      = drvled_probe,
-    .remove     = drvled_remove,
+    .probe      = LedProbe,
+    .remove     = LedRemove,
 };
 
 module_platform_driver(drvled_driver);
