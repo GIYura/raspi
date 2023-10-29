@@ -136,3 +136,5 @@ make unload
 
 ![driver-bus](https://github.com/GIYura/raspi/blob/main/drivers/ldd/led/driver-bus.png)
 
+![i2c-bus](https://github.com/GIYura/raspi/blob/main/drivers/ldd/led/i2c-bus.png)
+
