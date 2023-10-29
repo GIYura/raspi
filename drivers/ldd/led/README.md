@@ -4,7 +4,7 @@
 src-01 - пример драйвера LED (абстракция - ч.1);
 src-02 - пример драйвера LED (talk-to-hardware - ч.2);
 src-03 - пример драйвера LED (led framework - ч.3); 
-src-04 - 
+src-04 - пример драйвера LED (access to HW via GPIOLIB - ч.4);
 src-05
 ```
 
@@ -121,4 +121,6 @@ echo heartbeat > trigger
 ```
 make unload
 ```
+
+#### Решение второго недостатка. GPIO lib
 
